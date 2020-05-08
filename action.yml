@@ -1,0 +1,41 @@
+# action.yml
+name: Post deploy status to Slack
+description: Post GitHub Action deploy status to Slack
+inputs:
+  id:
+    description: GitHub Deploy ID
+    required: false
+    default: ${{ github.event.deployment.id }}
+
+  environment:
+    description: Environment being deployed to
+    required: false
+    default: ${{ github.event.deployment.environment }}
+
+  user:
+    description: Username of the user who initiated the deploy
+    required: false
+    default: ${{ fromJSON(github.event.deployment.payload).username }}
+
+  status:
+    description: Deploy status (Started, Canceled, Success, Failed)
+    required: true
+
+  text:
+    description: Deploy text
+    required: false
+
+  slack-webhook-url:
+    description: Slack WebHook url
+    required: true
+
+runs:
+  using: docker
+  image: Dockerfile
+  args:
+    - ${{ inputs.id }}
+    - ${{ inputs.environment }}
+    - ${{ inputs.user }}
+    - ${{ inputs.slack-webhook-url }}
+    - ${{ inputs.status }}
+    - ${{ inputs.text }}
