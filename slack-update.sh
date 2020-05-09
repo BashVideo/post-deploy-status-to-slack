@@ -1,5 +1,14 @@
 #!/bin/bash
 
+if [ -z "$GITHUB_REF" ]; then
+  DEPLOY_REF=$GITHUB_SHA
+else
+  DEPLOY_REF=$GITHUB_REF
+fi
+
+DEPLOY_REPOSITORY=$GITHUB_REPOSITORY
+DEPLOY_LOG_URL="https://github.com/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"
+
 DEFAULT_DEPLOY_TEXT="Deploy status changed to $DEPLOY_STATUS"
 DEPLOY_TEXT=${DEPLOY_TEXT:-"$DEFAULT_DEPLOY_TEXT"}
 DEPLOY_REF=$(echo "$DEPLOY_REF" | sed "s/refs\/heads\///")
