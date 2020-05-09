@@ -2,6 +2,7 @@
 
 DEFAULT_DEPLOY_TEXT="Deploy status changed to *$DEPLOY_STATUS*"
 DEPLOY_TEXT=${DEPLOY_TEXT:-"$DEFAULT_DEPLOY_TEXT"}
+DEPLOY_REF=$(echo "$DEPLOY_REF" | sed "s/refs\/heads\///")
 
 if [ "$DEPLOY_STATUS" == 'Started' ]; then
   DEPLOY_COLOR="#aaaaaa"
@@ -29,5 +30,4 @@ PAYLOAD=$(jq -n --arg text "$DEPLOY_TEXT" --arg color "$DEPLOY_COLOR" --arg user
   }]
 }')
 
-echo $PAYLOAD
 curl -X POST -H "Content-Type: application/json" --data "$PAYLOAD" $SLACK_WEBHOOK_URL
