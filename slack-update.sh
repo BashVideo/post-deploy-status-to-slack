@@ -9,9 +9,10 @@ fi
 DEPLOY_REPOSITORY=$GITHUB_REPOSITORY
 DEPLOY_LOG_URL="https://github.com/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"
 
-DEFAULT_DEPLOY_TEXT="Deploy status changed to $DEPLOY_STATUS"
-DEPLOY_TEXT=${DEPLOY_TEXT:-"$DEFAULT_DEPLOY_TEXT"}
 DEPLOY_REF=$(echo "$DEPLOY_REF" | sed "s/refs\/heads\///")
+DEFAULT_DEPLOY_TEXT="Deploy #$DEPLOY_ID ($GITHUB_REPOSITORY#$DEPLOY_REF) status changed to $DEPLOY_STATUS"
+DEPLOY_TEXT=${DEPLOY_TEXT:-"$DEFAULT_DEPLOY_TEXT"}
+
 
 if [ "$DEPLOY_STATUS" == 'Started' ]; then
   DEPLOY_COLOR="#aaaaaa"
@@ -23,6 +24,7 @@ fi
 
 PAYLOAD=$(jq -n --arg text "$DEPLOY_TEXT" --arg color "$DEPLOY_COLOR" --arg user "$DEPLOY_USER" \
   --arg ref "<https://github.com/$DEPLOY_REPOSITORY/tree/$DEPLOY_REF|$DEPLOY_REPOSITORY#$DEPLOY_REF>" \
+  --arg commit "<https://github.com/$DEPLOY_REPOSITORY/commit/$GITHUB_SHA|$GITHUB_SHA>" \
   --arg env "$DEPLOY_ENVIRONMENT" --arg deployment "ID: $DEPLOY_ID <$DEPLOY_LOG_URL|Logs>" \
 '
 {
@@ -33,6 +35,7 @@ PAYLOAD=$(jq -n --arg text "$DEPLOY_TEXT" --arg color "$DEPLOY_COLOR" --arg user
     fields: [
       { title: "User", value: $user },
       { title: "Ref", value: $ref },
+      { title: "Commit", value: $commit },
       { title: "Environment", value: $env },
       { title: "GitHub Deployment", value: $deployment }
     ]
