@@ -1,6 +1,6 @@
 #!/bin/bash
 
-DEFAULT_DEPLOY_TEXT="Deploy status changed to *$DEPLOY_STATUS*"
+DEFAULT_DEPLOY_TEXT="Deploy status changed to $DEPLOY_STATUS"
 DEPLOY_TEXT=${DEPLOY_TEXT:-"$DEFAULT_DEPLOY_TEXT"}
 DEPLOY_REF=$(echo "$DEPLOY_REF" | sed "s/refs\/heads\///")
 
