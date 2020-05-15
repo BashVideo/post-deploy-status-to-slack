@@ -9,14 +9,14 @@ fi
 DEPLOY_REPOSITORY=$GITHUB_REPOSITORY
 DEPLOY_LOG_URL="https://github.com/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"
 
+DEPLOY_STATUS=${DEPLOY_STATUS,,}
 DEPLOY_REF=$(echo "$DEPLOY_REF" | sed "s/refs\/heads\///")
 DEFAULT_DEPLOY_TEXT="Deploy #$DEPLOY_ID ($GITHUB_REPOSITORY#$DEPLOY_REF) status changed to $DEPLOY_STATUS"
 DEPLOY_TEXT=${DEPLOY_TEXT:-"$DEFAULT_DEPLOY_TEXT"}
 
-
-if [ "$DEPLOY_STATUS" == 'Started' ]; then
+if [[ "$DEPLOY_STATUS" =~ 'started' ]]; then
   DEPLOY_COLOR="#aaaaaa"
-elif [ "$DEPLOY_STATUS" == 'Success' ]; then
+elif [ "$DEPLOY_STATUS" == 'success' ]; then
   DEPLOY_COLOR="#36a64f"
 else
   DEPLOY_COLOR="#ff0000"
